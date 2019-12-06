@@ -10,7 +10,13 @@ watchify js/index.js -o js/bundle.js
 ```
 
 
-Start local http server
+Start local http server for frontend
 ```
 http-server
+```
+
+
+Start backend
+```
+nodemon app.js
 ```

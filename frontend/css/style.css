@@ -1,0 +1,28 @@
+.podcast-item {
+    padding: 2rem 2rem 2rem 2rem;
+    font-size: 1.5rem;
+}
+
+.podcast-item {
+    border-bottom: 50px solid black;
+}
+.podcast-item div {
+    margin-top: auto;
+    margin-bottom: auto;
+    font-weight: bold;
+}
+
+hr {
+    border: 15px solid black;
+}
+
+.number {
+    font-size: 4rem;
+}
+
+.title {
+    margin-left: 50px;
+    font-size: 4rem;
+}
+
+.podcast-item-container:nth-child(odd) .row {background: #e0e0e0 }

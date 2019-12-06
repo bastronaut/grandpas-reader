@@ -1,16 +1,57 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
-// example.js - Example front-end (client-side) code using browser-request via browserify
-//
-var request = require('browser-request')
-request('http://feeds.nos.nl/nosnieuwsalgemeen', function (er, res) {
-    if (!er)
-        return console.log('browser-request got your root path:\n' + res.body)
+exports.PODCAST_ENDPOINT = "http://localhost:3000/podcasts";
+},{}],2:[function(require,module,exports){
+var request = require('browser-request');
+var constants = require('./constants');
 
-    console.log('There was san error, but at least browser-request loaded and ran!')
-    throw er
-})
 
-},{"browser-request":2}],2:[function(require,module,exports){
+const getPodcasts = () => {
+
+    return new Promise((resolve, err) => {
+        request(constants.PODCAST_ENDPOINT, function (er, res) {
+            if (er) console.log(er);
+
+            const podcasts = JSON.parse(res.body);
+            return resolve(podcasts);
+        });
+    });
+
+}
+
+const renderPodcasts = () => {
+    getPodcasts().then(podcasts => {
+        if (podcasts.item) {
+            renderPodcastItem(podcasts.item[0]);
+        }
+
+    }).catch(err => console.log(err));
+}
+
+renderPodcastItem = (item) => {
+    console.log(item);
+    const date = new Date(item.pubDate[0]);
+    const printDate = formatDate(date);
+    console.log(printDate);
+}
+
+
+const formatDate = (date) => {
+    var monthNames = [
+        "Januari", "Februari", "Maart",
+        "April", "Mei", "Juni", "Juli",
+        "Augustus", "September", "Oktober",
+        "November", "December"
+    ];
+
+    var day = date.getDate();
+    var monthIndex = date.getMonth();
+    var year = date.getFullYear();
+
+    return day + ' ' + monthNames[monthIndex] + ' ' + year;
+}
+
+renderPodcasts();
+},{"./constants":1,"browser-request":3}],3:[function(require,module,exports){
 // Browser Request
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -506,4 +547,4 @@ function b64_enc (data) {
 }));
 //UMD FOOTER END
 
-},{}]},{},[1]);
+},{}]},{},[2]);
