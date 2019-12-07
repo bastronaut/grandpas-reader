@@ -18,41 +18,50 @@
 
 <body>
 
-    <div class="container-fluid">
+    <div class="container-fluid" id="js-podcast-items">
 
-        <div id="podcast-item-template" class="podcast-item-container">
-            <div class="row podcast-item">
-                <div class="col-md-1 number text-center">1.</div>
-                <div class="col title">5 December 2019
+        <div id="js-podcast-item-template" class="podcast-item-container" style="display: none;">
+            <div class="row podcast-item js-podcast-item">
+                <div class="col-md-1 number text-center" id="js-number-indicator">1.</div>
+                <div class="col title" id="js-title">5 December 2019
                 </div>
+            </div>
+            <div class="bottom-border-indicator">
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid podcast-view" id="js-podcast-view" style="display: none">
+
+        <div class="row">
+            <div class="back" id="js-return-to-overview" aria-hidden="true">
+                Terug naar overzicht
+            </div>
+            <p id="js-audio-description" class="audio-description">
+                Met vandaag: Het wekelijkse gesprek met de MP | Nina Jurna over de toespraak van Bouterse | Sjoukje
+                Rietbroek over de diplomatieke verhouding tussen Marokko en Nederland | De wereldberoemde
+                natuurfotograaf Frans Lanting zegt dat ongerepte natuur niet meer bestaat. Presentatie: Simone Weimans.
+            </p>
+            <audio id="js-audio-player"
+                src="https://podcast.npo.nl/file/met-het-oog-op-morgen/24786/content.omroep.nl/portal/podcast/nporadio1/met-het-oog-op-morgen/2019/12/nporadio1_met-het-oog-op-morgen_20191206_met-het-oog-op-morgen-06-12-2019_FI5E63.mp3"
+                controls="controls" preload="none"></audio>
+
+        </div>
+        <div class="row button-container">
+
+            <div class="play" id="js-play-button">
+                Afspelen
+            </div>
+
+            <div class="pause" id="js-pause-button" style="display: none;">
+                Pauzeren
             </div>
         </div>
 
-        <div id="podcast-item-template" class="podcast-item-container">
-            <div class="row podcast-item">
-                <div class="col-md-1 number text-center">1.</div>
-                <div class="col title">5 December 2019
-                </div>
-            </div>
-        </div>
-
-        <div id="podcast-item-template" class="podcast-item-container">
-            <div class="row podcast-item">
-                <div class="col-md-1 number text-center">1.</div>
-                <div class="col title">5 December 2019
-                </div>
-            </div>
-        </div>
-
-        <div id="podcast-item-template" class="podcast-item-container">
-            <div class="row podcast-item">
-                <div class="col-md-1 number text-center">1.</div>
-                <div class="col title">5 December 2019
-                </div>
-            </div>
-        </div>
 
     </div>
+
+
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
         integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
         crossorigin="anonymous"></script>

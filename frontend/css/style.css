@@ -4,7 +4,9 @@
 }
 
 .podcast-item {
-    border-bottom: 50px solid black;
+    border-bottom: 45px solid black;
+    cursor: pointer;
+    z-index: 1;
 }
 .podcast-item div {
     margin-top: auto;
@@ -12,17 +14,92 @@
     font-weight: bold;
 }
 
-hr {
-    border: 15px solid black;
-}
 
 .number {
     font-size: 4rem;
 }
 
 .title {
-    margin-left: 50px;
+    margin-left: 40px;
     font-size: 4rem;
 }
 
-.podcast-item-container:nth-child(odd) .row {background: #e0e0e0 }
+/* .podcast-item-container:nth-child(odd) .row.podcast-item {background: #efefef } */
+
+.podcast-item-container:nth-child(odd) .bottom-border-indicator {border-bottom: 15px solid #52e0c0; }
+.podcast-item-container:nth-child(even) .bottom-border-indicator {border-bottom: 15px solid #fa7a5b; }
+
+.bottom-border-indicator {
+    box-sizing: content-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+}
+
+/* Podcast view styling */
+
+.podcast-view {
+    text-align: center;
+}
+.play, .pause {
+    font-size: 6rem;
+    color: black;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 50px;
+    display: inline-block;
+    padding: 2rem 3rem;;
+    cursor: pointer;
+}
+
+.button-container .play, .button-container .pause {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.play {
+    background-color: #03bd85;
+}
+
+.pause {
+    background-color: #fb0246;
+}
+
+audio {
+    width: 80%;
+    margin: 3rem auto;
+}
+
+.audio-description {
+    font-weight: bold;
+    font-size: 1.5rem;
+    padding: 1.5rem;
+    margin-bottom: 0;
+}
+
+.back {
+    background-color: #0251d6;
+    padding: 3rem;
+    font-size: 3rem;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+/*  red    color: #fb0246; */
+/*  green    color: #03bd85; */
+/*  blue    color: #0251d6; */
+/*  orange    color: #fa7a5b; */
+/*  purpleish    color: #92364e; */
+/*  turqoise    color: #52e0c0; */
+
+
+
+/* experimental yellow color scheme */
+
+/* body { background: yellow; }
+* { color: black; }
+.podcast-item-container:nth-child(odd) .bottom-border-indicator {border-bottom: 15px solid #fff; }
+.podcast-item-container:nth-child(even) .bottom-border-indicator {border-bottom: 15px solid #fff; } */
