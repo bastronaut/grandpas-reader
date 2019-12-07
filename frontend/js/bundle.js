@@ -1,14 +1,15 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 exports.PODCAST_ENDPOINT = "http://localhost:3000/podcasts";
 },{}],2:[function(require,module,exports){
-var request = require('browser-request');
-var constants = require('./constants');
-
+const request = require('browser-request');
+const constants = require('./constants');
+let globalPodcasts; // global item to make 'nexting' from any view simpler
+let currentActivePodcast = 0;
 
 const getPodcasts = () => {
 
     return new Promise((resolve, err) => {
-        request(constants.PODCAST_ENDPOINT, function (er, res) {
+        request(constants.PODCAST_ENDPOINT, (er, res) => {
             if (er) console.log(er);
 
             const podcasts = JSON.parse(res.body);
@@ -20,6 +21,9 @@ const getPodcasts = () => {
 
 const renderPodcasts = () => {
     getPodcasts().then(podcasts => {
+
+        globalPodcasts = podcasts.item;
+
         if (podcasts.item) {
             for (var i = 0; i < 50; i++) {
                 renderPodcastItem(podcasts.item[i], i);
@@ -32,7 +36,6 @@ const renderPodcasts = () => {
 }
 
 renderPodcastItem = (item, i) => {
-    console.log(item);
     const printNumber = (i + 1) + ".";
     const date = new Date(item.pubDate[0]);
     const printDate = formatDate(date);
@@ -40,8 +43,7 @@ renderPodcastItem = (item, i) => {
     clone.find("#js-number-indicator").text(printNumber);
     clone.find("#js-title").text(printDate);
     clone.attr("id", "");
-    clone.attr("audio-src", item.link);
-    clone.attr("audio-description", item.description);
+    clone.find(".js-podcast-item").attr("audio-item-nr", i);
     $("#js-podcast-items").append(clone);
     clone.show();
 }
@@ -62,74 +64,113 @@ const formatDate = (date) => {
     return day + ' ' + monthNames[monthIndex] + ' ' + year;
 }
 
-renderPodcasts();
-
-
 const hidePodcastItems = () => {
     $("#js-podcast-items").hide();
 }
 const showPodcastItems = () => {
     $("#js-podcast-items").show();
+    hidePodcastView();
 }
 
 const hidePodcastView = () => {
+    hideStopButton();
     $("#js-podcast-view").hide();
+
 }
-const showPodcastView = () => {
+
+const showPodcastView = (activePodcastNr) => {
+
+    let activePodcast = globalPodcasts[activePodcastNr];
+    if (activePodcast && activePodcast.description) {
+        $("#js-audio-description").text(activePodcast.description[0]);
+    }
+    if (activePodcast && activePodcast.link) {
+        $("#js-audio-player").attr("src", activePodcast.link[0]);
+    }
+
+    if (activePodcast && activePodcast.pubDate) {
+        const date = new Date(activePodcast.pubDate[0]);
+        $("#js-audio-description").append("<br />");
+        $("#js-audio-description").append(formatDate(date));
+    }
+
+    hidePodcastItems();
     $("#js-podcast-view").show();
 }
 
-const clickPlayButton = () => {
+const hidePlayButton = () => {
     $("#js-play-button").hide();
     $("#js-pause-button").show();
-    document.getElementById("js-audio-player").play();
+
 }
 
-const clickStopButton = () => {
+const hideStopButton = () => {
     $("#js-play-button").show();
     $("#js-pause-button").hide();
-    document.getElementById("js-audio-player").pause();
 }
 
 const clickReturnToOverview = () => {
-    hidePodcastView();
+    pauseAudio();
     showPodcastItems();
-
 }
-
-hidePodcastItems();
-showPodcastView();
-
-
 
 
 const setupOnclicks = () => {
 
     $(".podcast-item-container").on("click", (e) => {
-        console.log(5);
-        console.log(this);
-        console.log(e);
-    })
 
+        let node = $(e.target);
+        let podcastNrClicked = getPodcastNrFromClick(node);
+        currentActivePodcast = Number(podcastNrClicked);
+        showPodcastView(currentActivePodcast);
+
+    });
 
     $("#js-play-button").on("click", () => {
-        clickPlayButton();
-    })
+        hidePlayButton();
+        playAudio();
+    });
 
     $("#js-pause-button").on("click", () => {
-        clickStopButton();
-    })
+        hideStopButton();
+        pauseAudio();
+    });
 
     $("#js-return-to-overview").on("click", () => {
         clickReturnToOverview();
+    });
+
+    $("#js-next-item").on("click", () => {
+        currentActivePodcast = currentActivePodcast + 1;
+        showPodcastView(currentActivePodcast);
     })
+
+    const audio = document.getElementsByTagName("audio")[0];
+    audio.addEventListener("playing", function () { hidePlayButton(); }, true);
+    audio.addEventListener("pause", function () { hideStopButton(); }, true);
+
+
+}
+
+// Podcast nr is stored in element in dom, but onclick may have fired from child node
+const getPodcastNrFromClick = (element) => {
+    if (element.hasClass("js-podcast-item") || element.is('body')) {
+        return element.attr("audio-item-nr");
+    }
+    return getPodcastNrFromClick(element.parent());
 }
 
 
+const pauseAudio = () => {
+    document.getElementById("js-audio-player").pause();
+}
 
-$(window).click(function (e) {
-    console.log(e.target); // then e.srcElement.className has the class
-});
+const playAudio = () => {
+    document.getElementById("js-audio-player").play();
+}
+
+renderPodcasts();
+
 },{"./constants":1,"browser-request":3}],3:[function(require,module,exports){
 // Browser Request
 //

@@ -20,3 +20,7 @@ Start backend
 ```
 nodemon app.js
 ```
+
+
+TODO:
+- swipe right for next audio file

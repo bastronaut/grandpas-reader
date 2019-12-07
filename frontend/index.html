@@ -12,6 +12,8 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="apple-touch-icon" href="css/custom_icon.png">
+    <link rel="icon" type="image/png" href="favicon.png">
 
 
 </head>
@@ -22,8 +24,8 @@
 
         <div id="js-podcast-item-template" class="podcast-item-container" style="display: none;">
             <div class="row podcast-item js-podcast-item">
-                <div class="col-md-1 number text-center" id="js-number-indicator">1.</div>
-                <div class="col title" id="js-title">5 December 2019
+                <div class="col-md-1 number text-center" id="js-number-indicator"></div>
+                <div class="col title" id="js-title">
                 </div>
             </div>
             <div class="bottom-border-indicator">
@@ -34,17 +36,18 @@
     <div class="container-fluid podcast-view" id="js-podcast-view" style="display: none">
 
         <div class="row">
-            <div class="back" id="js-return-to-overview" aria-hidden="true">
+            <div class="back navigate" id="js-return-to-overview" aria-hidden="true">
                 Terug naar overzicht
             </div>
+            <div class="next navigate" id="js-next-item" aria-hidden="true">
+                Volgende
+            </div>
+        </div>
+        <div class="row">
             <p id="js-audio-description" class="audio-description">
-                Met vandaag: Het wekelijkse gesprek met de MP | Nina Jurna over de toespraak van Bouterse | Sjoukje
-                Rietbroek over de diplomatieke verhouding tussen Marokko en Nederland | De wereldberoemde
-                natuurfotograaf Frans Lanting zegt dat ongerepte natuur niet meer bestaat. Presentatie: Simone Weimans.
             </p>
-            <audio id="js-audio-player"
-                src="https://podcast.npo.nl/file/met-het-oog-op-morgen/24786/content.omroep.nl/portal/podcast/nporadio1/met-het-oog-op-morgen/2019/12/nporadio1_met-het-oog-op-morgen_20191206_met-het-oog-op-morgen-06-12-2019_FI5E63.mp3"
-                controls="controls" preload="none"></audio>
+            <!-- <p id="js-audio-date"></p> -->
+            <audio id="js-audio-player" src="" controls="controls" preload="none"></audio>
 
         </div>
         <div class="row button-container">

@@ -14,7 +14,6 @@
     font-weight: bold;
 }
 
-
 .number {
     font-size: 4rem;
 }
@@ -53,15 +52,18 @@
     display: inline-block;
     padding: 2rem 3rem;;
     cursor: pointer;
-}
-
-.button-container .play, .button-container .pause {
     margin-left: auto;
     margin-right: auto;
+
+    /* stick button to bottom */
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 1rem;
 }
 
 .play {
-    background-color: #03bd85;
+    background-color: #52e0c0;
 }
 
 .pause {
@@ -80,14 +82,23 @@ audio {
     margin-bottom: 0;
 }
 
-.back {
-    background-color: #0251d6;
-    padding: 3rem;
-    font-size: 3rem;
-    color: white;
+.navigate {
     font-weight: bold;
     cursor: pointer;
+    padding: 3rem;
+    font-size: 3rem;
 }
+
+.back {
+    background-color: #0251d6;
+    color: white;
+}
+
+.next {
+    background-color: #fa7a5b;
+    margin-left: auto;
+}
+
 /*  red    color: #fb0246; */
 /*  green    color: #03bd85; */
 /*  blue    color: #0251d6; */
@@ -103,3 +114,9 @@ audio {
 * { color: black; }
 .podcast-item-container:nth-child(odd) .bottom-border-indicator {border-bottom: 15px solid #fff; }
 .podcast-item-container:nth-child(even) .bottom-border-indicator {border-bottom: 15px solid #fff; } */
+
+@media only screen and (max-width: 769px) {
+    .navigate {
+      font-size: 2rem;
+    }
+  }
