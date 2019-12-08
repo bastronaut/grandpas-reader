@@ -1,1 +1,1 @@
-exports.PODCAST_ENDPOINT = "http://localhost:3000/podcasts";
+exports.PODCAST_ENDPOINT = "/podcasts";
