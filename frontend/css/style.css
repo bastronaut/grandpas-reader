@@ -1,5 +1,5 @@
 .podcast-item {
-    padding: 2rem 2rem 2rem 2rem;
+    padding: 2rem;
     font-size: 1.5rem;
 }
 
@@ -19,7 +19,7 @@
 }
 
 .title {
-    margin-left: 40px;
+    padding-left: 2rem;
     font-size: 4rem;
 }
 
@@ -119,4 +119,35 @@ audio {
     .navigate {
       font-size: 2rem;
     }
+  }
+
+
+  @media only screen and (max-width: 668gpx) {
+    .title, .number {
+      font-size: 1.8rem;
+      padding-left: 0;
+    }
+    .podcast-item {
+        padding: 1rem;
+    }
+
+    .back, .next {
+        padding: 1rem;
+        width: 100%;
+    }
+
+    .play, .pause {
+        font-size: 3rem;
+        padding: 0.5rem 2rem;
+        border-radius: 15px;
+    }
+
+    .audio-description {
+        font-size: 1.5rem;
+    }
+
+    audio {
+        margin: 1rem auto;
+    }
+
   }
