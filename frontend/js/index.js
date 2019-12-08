@@ -13,7 +13,6 @@ const getPodcasts = () => {
             return resolve(podcasts);
         });
     });
-
 }
 
 const renderPodcasts = () => {
@@ -93,6 +92,7 @@ const showPodcastView = (activePodcastNr) => {
 
     hidePodcastItems();
     $("#js-podcast-view").show();
+    hideStopButton();
 }
 
 const hidePlayButton = () => {
@@ -123,20 +123,24 @@ const setupOnclicks = () => {
 
     });
 
+    // Play button on Podcast view page
     $("#js-play-button").on("click", () => {
         hidePlayButton();
         playAudio();
     });
 
+    // Pause button on Podcast view page
     $("#js-pause-button").on("click", () => {
         hideStopButton();
         pauseAudio();
     });
 
+    // Back to list view button
     $("#js-return-to-overview").on("click", () => {
         clickReturnToOverview();
     });
 
+    // Next podcast button
     $("#js-next-item").on("click", () => {
         currentActivePodcast = currentActivePodcast + 1;
         showPodcastView(currentActivePodcast);
@@ -165,5 +169,6 @@ const pauseAudio = () => {
 const playAudio = () => {
     document.getElementById("js-audio-player").play();
 }
+
 
 renderPodcasts();

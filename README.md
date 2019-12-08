@@ -1,22 +1,23 @@
+Frontend needs to be recompiled into a bundle upon changes
 
-compile js:
+### Watch for file changes:
 ```
-browserify js/index.js -o js/bundle.js
-```
-
-Watch for file changes:
-```
-watchify js/index.js -o js/bundle.js
+watchify frontend/js/index.js -o frontend/js/bundle.js
 ```
 
+### Compile one time js:
+```
+browserify frontend/js/index.js -o frontend/js/bundle.js
+```
 
-Start local http server for frontend
+
+### Start local http server for frontend
 ```
 http-server
 ```
 
 
-Start backend
+### Start backend
 ```
 nodemon app.js
 ```
