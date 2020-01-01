@@ -1,3 +1,18 @@
+# Google credentials
+
+Requires setting the credentials in environment variables.
+
+Log into heroku panel, and set Config vars:
+
+```
+heroku config:set GOOGLE_CREDENTIALS={the json content of the google credentials file}
+```
+
+
+example:
+https://medium.com/@michaelhays_84022/heres-a-much-simpler-and-more-secure-solution-dedfd792caf9
+
+
 Frontend needs to be recompiled into a bundle upon changes
 
 ### Watch for file changes:
