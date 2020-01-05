@@ -82,6 +82,12 @@ audio {
     margin-bottom: 0;
 }
 
+.audio-title {
+    font-weight: bold;
+    font-size: 2rem;
+    padding: 0 1.5rem;
+}
+
 .navigate {
     font-weight: bold;
     cursor: pointer;

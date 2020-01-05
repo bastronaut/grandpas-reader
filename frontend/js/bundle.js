@@ -3,12 +3,20 @@ exports.PODCAST_ENDPOINT = "/podcasts";
 exports.NEWS_ENDPOINT = "/news";
 exports.TRANSLATE_ENDPOINT = "/translate";
 },{}],2:[function(require,module,exports){
+// enable for NOS news
+const news = require('./news');
+
+// enable for NOS Oog op Morgen podcasts
+// const podcasts = require('./podcasts');
+
+},{"./news":3}],3:[function(require,module,exports){
 const request = require('browser-request');
 const constants = require('./constants');
-let globalPodcasts; // lazy global item to make 'nexting' from any view simpler
+const util = require('./util');
+
 let globalNewsItems; // lazy global item to make 'nexting' and 'preving' simpler
 let currentActiveNewsItem = 0;
-let currentActivePodcast = 0;
+
 
 const getFeed = (endpoint) => {
     return new Promise((resolve, err) => {
@@ -21,50 +29,18 @@ const getFeed = (endpoint) => {
     });
 }
 
-const renderPodcasts = () => {
-    getFeed(constants.PODCAST_ENDPOINT).then(podcasts => {
 
-        globalPodcasts = podcasts.item;
+const renderNews = () => {
 
-        if (podcasts.item) {
-            for (var i = 0; i < 50; i++) {
-                renderPodcastItem(podcasts.item[i], i);
-            }
-        }
+    getFeed(constants.NEWS_ENDPOINT).then(news => {
+        globalNewsItems = news.result;
+        renderNewsItem(globalNewsItems[0]);
 
-        setupOnclicks();
-
+        setupNewsOnClicks();
     }).catch(err => console.log(err));
 }
 
-renderPodcastItem = (item, i) => {
-    const printNumber = (i + 1) + ".";
-    const date = new Date(item.pubDate[0]);
-    const printDate = formatDate(date);
-    let clone = $("#js-podcast-item-template").clone();
-    clone.find("#js-number-indicator").text(printNumber);
-    clone.find("#js-title").text(printDate);
-    clone.attr("id", "");
-    clone.find(".js-podcast-item").attr("audio-item-nr", i);
-    $("#js-podcast-items").append(clone);
-    clone.show();
-}
 
-
-const formatDate = (date) => {
-    var monthNames = [
-        "Januari", "Februari", "Maart",
-        "April", "Mei", "Juni", "Juli",
-        "Augustus", "September", "Oktober",
-        "November", "December"
-    ];
-
-    var day = date.getDate();
-    var monthIndex = date.getMonth();
-    var year = date.getFullYear();
-
-    return day + ' ' + monthNames[monthIndex] + ' ' + year;
-}
 
 const hidePodcastItems = () => {
     $("#js-podcast-items").hide();
@@ -93,7 +69,7 @@ const showPodcastView = (activePodcastNr) => {
     if (activePodcast && activePodcast.pubDate) {
         const date = new Date(activePodcast.pubDate[0]);
         $("#js-audio-description").append("<br />");
-        $("#js-audio-description").append(formatDate(date));
+        $("#js-audio-description").append(util.formatDate(date));
     }
 
     hidePodcastItems();
@@ -118,7 +94,7 @@ const clickReturnToOverview = () => {
 }
 
 
-const setupOnclicks = () => {
+const setupPodcastOnclicks = () => {
 
     $(".podcast-item-container").on("click", (e) => {
 
@@ -178,29 +154,42 @@ const playAudio = () => {
 
 
 
-const renderNews = () => {
-
-    getFeed(constants.NEWS_ENDPOINT).then(news => {
-        console.log("yes!");
-        globalNewsItems = news;
-        renderNewsItem(globalNewsItems[0]);
-    })
-
-}
-
 const renderNewsItem = (newsItem) => {
     console.log(newsItem);
+    $("#js-news-title").text(newsItem.title[0]);
+    $("#js-news-description").html(newsItem.description[0]);
+
+    const date = new Date(newsItem.pubDate[0]);
+    const printDate = util.formatDate(date);
+
+    $("#js-news-date").text(printDate);
 }
 
 
+const setupNewsOnClicks = () => {
+
+
+}
 
 renderNews();
 
 
+},{"./constants":1,"./util":4,"browser-request":5}],4:[function(require,module,exports){
+exports.formatDate = (date) => {
+    var monthNames = [
+        "Januari", "Februari", "Maart",
+        "April", "Mei", "Juni", "Juli",
+        "Augustus", "September", "Oktober",
+        "November", "December"
+    ];
 
-// Enable to render list of podcasts
-// renderPodcasts();
-},{"./constants":1,"browser-request":3}],3:[function(require,module,exports){
+    var day = date.getDate();
+    var monthIndex = date.getMonth();
+    var year = date.getFullYear();
+
+    return day + ' ' + monthNames[monthIndex] + ' ' + year;
+}
+},{}],5:[function(require,module,exports){
 // Browser Request
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
