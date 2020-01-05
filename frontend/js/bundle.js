@@ -1,15 +1,18 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 exports.PODCAST_ENDPOINT = "/podcasts";
+exports.NEWS_ENDPOINT = "/news";
+exports.TRANSLATE_ENDPOINT = "/translate";
 },{}],2:[function(require,module,exports){
 const request = require('browser-request');
 const constants = require('./constants');
-let globalPodcasts; // global item to make 'nexting' from any view simpler
+let globalPodcasts; // lazy global item to make 'nexting' from any view simpler
+let globalNewsItems; // lazy global item to make 'nexting' and 'preving' simpler
+let currentActiveNewsItem = 0;
 let currentActivePodcast = 0;
 
-const getPodcasts = () => {
-
+const getFeed = (endpoint) => {
     return new Promise((resolve, err) => {
-        request(constants.PODCAST_ENDPOINT, (er, res) => {
+        request(endpoint, (er, res) => {
             if (er) console.log(er);
 
             const podcasts = JSON.parse(res.body);
@@ -19,7 +22,7 @@ const getPodcasts = () => {
 }
 
 const renderPodcasts = () => {
-    getPodcasts().then(podcasts => {
+    getFeed(constants.PODCAST_ENDPOINT).then(podcasts => {
 
         globalPodcasts = podcasts.item;
 
@@ -174,7 +177,29 @@ const playAudio = () => {
 }
 
 
-renderPodcasts();
+
+const renderNews = () => {
+
+    getFeed(constants.NEWS_ENDPOINT).then(news => {
+        console.log("yes!");
+        globalNewsItems = news;
+        renderNewsItem(globalNewsItems[0]);
+    })
+
+}
+
+const renderNewsItem = (newsItem) => {
+    console.log(newsItem);
+}
+
+
+
+renderNews();
+
+
+
+// Enable to render list of podcasts
+// renderPodcasts();
 },{"./constants":1,"browser-request":3}],3:[function(require,module,exports){
 // Browser Request
 //

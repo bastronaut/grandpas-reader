@@ -1,12 +1,13 @@
 const request = require('browser-request');
 const constants = require('./constants');
-let globalPodcasts; // global item to make 'nexting' from any view simpler
+let globalPodcasts; // lazy global item to make 'nexting' from any view simpler
+let globalNewsItems; // lazy global item to make 'nexting' and 'preving' simpler
+let currentActiveNewsItem = 0;
 let currentActivePodcast = 0;
 
-const getPodcasts = () => {
-
+const getFeed = (endpoint) => {
     return new Promise((resolve, err) => {
-        request(constants.PODCAST_ENDPOINT, (er, res) => {
+        request(endpoint, (er, res) => {
             if (er) console.log(er);
 
             const podcasts = JSON.parse(res.body);
@@ -16,7 +17,7 @@ const getPodcasts = () => {
 }
 
 const renderPodcasts = () => {
-    getPodcasts().then(podcasts => {
+    getFeed(constants.PODCAST_ENDPOINT).then(podcasts => {
 
         globalPodcasts = podcasts.item;
 
@@ -171,4 +172,26 @@ const playAudio = () => {
 }
 
 
-renderPodcasts();
+
+const renderNews = () => {
+
+    getFeed(constants.NEWS_ENDPOINT).then(news => {
+        console.log("yes!");
+        globalNewsItems = news;
+        renderNewsItem(globalNewsItems[0]);
+    })
+
+}
+
+const renderNewsItem = (newsItem) => {
+    console.log(newsItem);
+}
+
+
+
+renderNews();
+
+
+
+// Enable to render list of podcasts
+// renderPodcasts();

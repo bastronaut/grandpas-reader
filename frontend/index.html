@@ -66,6 +66,39 @@
 
     </div>
 
+    <div class="container-fluid news-view" id="js-news-view">
+
+
+        <div class="row">
+            <div class="back navigate" id="js-prev-news-items" aria-hidden="true">
+                Vorige
+            </div>
+            <div class="next navigate" id="js-next-news-item" aria-hidden="true">
+                Volgende
+            </div>
+        </div>
+        <div class="row">
+            <p id="js-news-title" class="audio-description"> </p>
+            <p id="js-news-description" class="audio-description">
+            </p>
+            <p id="js-news-date" class="audio-description">
+            </p>
+            <!-- <p id="js-audio-date"></p> -->
+            <audio id="js-news-audio-player" src="" controls="controls" preload="none"></audio>
+
+        </div>
+        <div class="row button-container">
+
+            <div class="play" id="js-play-news-button">
+                Afspelen
+            </div>
+
+            <div class="pause" id="js-pause-news-button" style="display: none;">
+                Pauzeren
+            </div>
+        </div>
+
+    </div>
 
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
         integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"

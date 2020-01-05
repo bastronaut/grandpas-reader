@@ -151,3 +151,10 @@ audio {
     }
 
   }
+
+
+  /* Overrides for News styling instead of podcasts */
+
+  .news-view .navigate {
+    padding: 3rem 6rem;
+  }
