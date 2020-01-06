@@ -13,9 +13,10 @@ router.use('/podcasts', (req, res, next) => {
     });
 });
 
-router.use('/translate', (req, res, next) => {
+router.use('/synthesize', (req, res, next) => {
 
-    const result = translater.translate("In de buurt van het Russische Vladivostok zijn zo'n 25 auto's door het ijs gezakt nadat de bestuurders een bevroren meer als parkeerplaats hadden gebruikt. De chauffeurs waren in de buurt gaan ijsvissen. Na een uur kregen ze berichten dat hun auto's aan het zinken waren.")
+    const synthesizeText = req.body.text;
+    const result = translater.translate(synthesizeText);
 
     result.then((audiocontent) => {
         res.set('content-type', 'audio/mp3');
@@ -41,6 +42,9 @@ router.use('/news', (req, res, next) => {
     });
 })
 
+router.use('/listvoices', (req, res, next) => {
+    translater.listVoices().then(voices => res.send(voices))
+})
 
 const mergeFeeds = (feeds) => {
 

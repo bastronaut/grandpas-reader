@@ -153,11 +153,26 @@ const renderNewsItem = (newsItem) => {
     $("#js-news-date").text(printDate);
 }
 
+const determineTextToSpeak = () => {
+    return new DOMParser().parseFromString($("#js-text-to-speak"), "text/html")
+        .documentElement.textContent;
+}
+
 
 const setupNewsOnClicks = () => {
 
 
 }
 
+const getAudio = (text) => {
+
+    request.post(constants.SYNTHESIZE_ENDPOINT, {
+        json: { "text": text }
+    }).then(result => {
+        
+    })
+
+    
+}
 renderNews();
 
