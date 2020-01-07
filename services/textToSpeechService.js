@@ -10,24 +10,16 @@ async function translate(text) {
 
     // Construct the request
     const request = {
-        input: { text: text },
+        input: { ssml: text },
         // Select the language and SSML Voice Gender (optional)
-        voice: { languageCode: 'nl-NL', ssmlGender: 'FEMALE', name: 'nl-NL-Wavenet-D' },
+        voice: { languageCode: 'nl-NL', ssmlGender: 'MALE', name: 'nl-NL-Wavenet-A' },
         // Select the type of audio encoding
-        audioConfig: { audioEncoding: 'MP3' },
+        audioConfig: { audioEncoding: 'MP3', speakingRate: 0.95 },
     };
 
     // Performs the Text-to-Speech request
     const [response] = await client.synthesizeSpeech(request);
-
-    // console.log('Audio content written to file: output.mp3');
-    // console.log(response);
-
     return response.audioContent;
-    // Write the binary audio content to a local file
-    // const writeFile = util.promisify(fs.writeFile);
-    // await writeFile('output.mp3', response.audioContent, 'binary');
-    // console.log('Audio content written to file: output.mp3');
 }
 
 async function listVoices() {

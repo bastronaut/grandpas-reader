@@ -3,6 +3,11 @@ exports.PODCAST_ENDPOINT = "/podcasts";
 exports.NEWS_ENDPOINT = "/news";
 exports.SYNTHESIZE_ENDPOINT = "/synthesize";
 exports.LAST_REFRESHED_VAR = "lastRefreshed";
+exports.FEED_PARAM = "feed";
+exports.FEED_NR_PARAM = "nr";
+exports.FEED_DATE_ONLY_PARAM = "dateOnly";
+exports.FEED_TITLE_ONLY_PARAM = "titleOnly";
+exports.NOS_NEWS_FEED = "NOSNews";
 
 },{}],2:[function(require,module,exports){
 // enable for NOS news
@@ -21,6 +26,8 @@ let currentActiveNewsItem = 0;
 
 
 const getFeed = (endpoint) => {
+    currentActiveNewsItem = 0;
+
     return new Promise((resolve, err) => {
         request(endpoint, (er, res) => {
             if (er) console.log(er);
@@ -38,96 +45,56 @@ const renderNews = () => {
         globalNewsItems = news.result;
         renderNewsItem(globalNewsItems[0]);
 
-        setupNewsOnClicks();
+        setupOnclicks();
     }).catch(err => console.log(err));
 }
 
 
-
-const hidePodcastItems = () => {
-    $("#js-podcast-items").hide();
-}
-const showPodcastItems = () => {
-    $("#js-podcast-items").show();
-    hidePodcastView();
-}
-
-const hidePodcastView = () => {
-    hideStopButton();
-    $("#js-podcast-view").hide();
-
-}
-
-const showPodcastView = (activePodcastNr) => {
-
-    let activePodcast = globalPodcasts[activePodcastNr];
-    if (activePodcast && activePodcast.description) {
-        $("#js-audio-description").text(activePodcast.description[0]);
-    }
-    if (activePodcast && activePodcast.link) {
-        $("#js-audio-player").attr("src", activePodcast.link[0]);
-    }
-
-    if (activePodcast && activePodcast.pubDate) {
-        const date = new Date(activePodcast.pubDate[0]);
-        $("#js-audio-description").append("<br />");
-        $("#js-audio-description").append(util.formatDate(date));
-    }
-
-    hidePodcastItems();
-    $("#js-podcast-view").show();
-    hideStopButton();
-}
-
 const hidePlayButton = () => {
-    $("#js-play-button").hide();
-    $("#js-pause-button").show();
+    $("#js-play-news-button").hide();
+    $("#js-pause-news-button").show();
 
 }
 
 const hideStopButton = () => {
-    $("#js-play-button").show();
-    $("#js-pause-button").hide();
-}
-
-const clickReturnToOverview = () => {
-    pauseAudio();
-    showPodcastItems();
+    $("#js-play-news-button").show();
+    $("#js-pause-news-button").hide();
 }
 
 
-const setupPodcastOnclicks = () => {
+const setupOnclicks = () => {
 
-    $(".podcast-item-container").on("click", (e) => {
-
-        let node = $(e.target);
-        let podcastNrClicked = getPodcastNrFromClick(node);
-        currentActivePodcast = Number(podcastNrClicked);
-        showPodcastView(currentActivePodcast);
-
-    });
-
-    // Play button on Podcast view page
-    $("#js-play-button").on("click", () => {
+    // Play button 
+    $("#js-play-news-button").on("click", () => {
         hidePlayButton();
         playAudio();
     });
 
-    // Pause button on Podcast view page
-    $("#js-pause-button").on("click", () => {
+    // Pause button 
+    $("#js-pause-news-button").on("click", () => {
         hideStopButton();
         pauseAudio();
     });
 
-    // Back to list view button
-    $("#js-return-to-overview").on("click", () => {
-        clickReturnToOverview();
+    // Previous news item button click
+    $("#js-prev-news-item").on("click", () => {
+        currentActiveNewsItem = currentActiveNewsItem - 1;
+
+        if (currentActiveNewsItem == 0) hidePrevButton();
+        if (currentActiveNewsItem < globalNewsItems.length - 1) showNextButton();
+
+
+        renderNewsItem(globalNewsItems[currentActiveNewsItem]);
     });
 
-    // Next podcast button
-    $("#js-next-item").on("click", () => {
-        currentActivePodcast = currentActivePodcast + 1;
-        showPodcastView(currentActivePodcast);
+    // Next news item button click
+    $("#js-next-news-item").on("click", () => {
+        currentActiveNewsItem = currentActiveNewsItem + 1;
+
+        if (currentActiveNewsItem > 0) showPrevButton();
+        if (currentActiveNewsItem == globalNewsItems.length - 1) hideNextButton();
+
+        renderNewsItem(globalNewsItems[currentActiveNewsItem]);
     })
 
     const audio = document.getElementsByTagName("audio")[0];
@@ -137,24 +104,27 @@ const setupPodcastOnclicks = () => {
 
 }
 
-// Podcast nr is stored in element in dom, but onclick may have fired from child node
-const getPodcastNrFromClick = (element) => {
-    if (element.hasClass("js-podcast-item") || element.is('body')) {
-        return element.attr("audio-item-nr");
-    }
-    return getPodcastNrFromClick(element.parent());
+const showPrevButton = () => {
+    $("#js-prev-news-item").show();
+}
+const hidePrevButton = () => {
+    $("#js-prev-news-item").hide();
 }
 
+const showNextButton = () => {
+    $("#js-prev-news-item").show();
+}
+const hideNextButton = () => {
+    $("#js-prev-news-item").hide();
+}
 
 const pauseAudio = () => {
-    document.getElementById("js-audio-player").pause();
+    document.getElementById("js-news-audio-player").pause();
 }
 
 const playAudio = () => {
-    document.getElementById("js-audio-player").play();
+    document.getElementById("js-news-audio-player").play();
 }
-
-
 
 const renderNewsItem = (newsItem) => {
     console.log(newsItem);
@@ -165,33 +135,32 @@ const renderNewsItem = (newsItem) => {
     const printDate = util.formatDate(date);
 
     $("#js-news-date").text(printDate);
+
+    const endpoint = determineSynthEndpoint();
+    console.log(endpoint);
+    $("#js-news-audio-player").attr("src", endpoint);
 }
 
-const determineTextToSpeak = () => {
-    return new DOMParser().parseFromString($("#js-text-to-speak"), "text/html")
-        .documentElement.textContent;
+const determineSynthEndpoint = () => {
+    return constants.SYNTHESIZE_ENDPOINT + '?' +
+        constants.FEED_PARAM + '=' + constants.NOS_NEWS_FEED +
+        '&' + constants.FEED_NR_PARAM + '=' + currentActiveNewsItem;
 }
 
-
-const setupNewsOnClicks = () => {
-
-
+const determineSynthEndpointTitleOnly = () => {
+    return constants.SYNTHESIZE_ENDPOINT + '?' +
+        constants.FEED_PARAM + '=' + constants.NOS_NEWS_FEED +
+        '&' + constants.FEED_NR_PARAM + '=' + currentActiveNewsItem +
+        '&' + constants.FEED_TITLE_ONLY_PARAM + '=1';
 }
 
-const getAudio = (text) => {
-
-    request.post(constants.SYNTHESIZE_ENDPOINT, {
-        json: { "text": text }
-    }).then(result => {
-
-    })
-
+const determineSynthEndpointDateOnly = () => {
+    return constants.SYNTHESIZE_ENDPOINT + '?' +
+        constants.FEED_PARAM + '=' + constants.NOS_NEWS_FEED +
+        '&' + constants.FEED_NR_PARAM + '=' + currentActiveNewsItem +
+        '&' + constants.FEED_DATE_ONLY_PARAM + '=1';
 
 }
-
-
-
-
 
 /**
  * Need a refresh mechanism so that grandpa does not need to restart the app
@@ -223,7 +192,7 @@ const runRefreshCheck = () => {
 
 const getLastRefreshTimestamp = () => {
     if (localStorage.getItem(constants.LAST_REFRESHED_VAR)) {
-        return new Date(localStorage.getItem(Number.parseInt(constants.LAST_REFRESHED_VAR))).getTime();
+        return new Date(Number.parseInt(localStorage.getItem(constants.LAST_REFRESHED_VAR))).getTime();
     } else {
         // First page load
         return setLastRefreshTimestamp();
@@ -242,19 +211,21 @@ setupRefreshMechanism();
 
 },{"./constants":1,"./util":4,"browser-request":5}],4:[function(require,module,exports){
 exports.formatDate = (date) => {
-    var monthNames = [
+    let monthNames = [
         "Januari", "Februari", "Maart",
         "April", "Mei", "Juni", "Juli",
         "Augustus", "September", "Oktober",
         "November", "December"
     ];
 
-    var day = date.getDate();
-    var monthIndex = date.getMonth();
-    var year = date.getFullYear();
+    let day = date.getDate();
+    let monthIndex = date.getMonth();
+    let year = date.getFullYear();
 
     return day + ' ' + monthNames[monthIndex] + ' ' + year;
 }
+
+
 },{}],5:[function(require,module,exports){
 // Browser Request
 //

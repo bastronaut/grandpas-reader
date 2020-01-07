@@ -162,5 +162,47 @@ audio {
   /* Overrides for News styling instead of podcasts */
 
   .news-view .navigate {
-    padding: 3rem 6rem;
+    padding: 3rem 0;
+    width: 32%;
+    text-align: center;
+    min-width: 200px;
   }
+
+  .text-body {
+      margin: 2rem 0 10rem 0;
+  }
+
+  .speak-btn {
+    font-size: 3rem;
+    color: black;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 50px;
+    display: inline-block;
+    padding: 2rem 0;
+    cursor: pointer;
+    position: fixed;
+    /* left: 50%; */
+    /* transform: translateX(-50%); */
+    bottom: 1rem;
+    width: 13rem;
+  }
+
+  .speak-title {
+    margin-left: auto;
+    background-color: #2F2FA2;
+    color: white;
+    left: 0;
+  }
+
+  .speak-date {
+      margin-right: auto;
+      background-color: #2F2FA2;
+      right: 0;
+      color: white;
+  }
+
+.back.navigate {
+    display: none;
+}
+
