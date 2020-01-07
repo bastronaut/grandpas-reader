@@ -213,7 +213,7 @@ const runRefreshCheck = () => {
 
 const getLastRefreshTimestamp = () => {
     if (localStorage.getItem(constants.LAST_REFRESHED_VAR)) {
-        return new Date(localStorage.getItem(Number.parseInt(constants.LAST_REFRESHED_VAR))).getTime();
+        return new Date(Number.parseInt(localStorage.getItem(constants.LAST_REFRESHED_VAR))).getTime();
     } else {
         // First page load
         return setLastRefreshTimestamp();
