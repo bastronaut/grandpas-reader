@@ -18,11 +18,14 @@ const getPodcasts = () => {
 const renderPodcasts = () => {
     getPodcasts().then(podcasts => {
 
+        // May be a re-render due to timeout, clean up old list
+        cleanupPodcastList();
+
         globalPodcasts = podcasts.item;
 
         if (podcasts.item) {
             for (var i = 0; i < 50; i++) {
-                renderPodcastItem(podcasts.item[i], i);
+                renderPodcastList(podcasts.item[i], i);
             }
         }
 
@@ -31,7 +34,7 @@ const renderPodcasts = () => {
     }).catch(err => console.log(err));
 }
 
-renderPodcastItem = (item, i) => {
+renderPodcastList = (item, i) => {
     const printNumber = (i + 1) + ".";
     const date = new Date(item.pubDate[0]);
     const printDate = formatDate(date);
@@ -63,7 +66,7 @@ const formatDate = (date) => {
 const hidePodcastItems = () => {
     $("#js-podcast-items").hide();
 }
-const showPodcastItems = () => {
+const showPodcastList = () => {
     $("#js-podcast-items").show();
     hidePodcastView();
 }
@@ -108,7 +111,7 @@ const hideStopButton = () => {
 
 const clickReturnToOverview = () => {
     pauseAudio();
-    showPodcastItems();
+    showPodcastList();
 }
 
 
@@ -170,5 +173,56 @@ const playAudio = () => {
     document.getElementById("js-audio-player").play();
 }
 
+const cleanupPodcastList = () => {
+    $(".podcast-item-container:not(#js-podcast-item-template)").remove();
+}
+
+
+/**
+ * Need a refresh mechanism so that grandpa does not need to restart the app
+ */
+const setupRefreshMechanism = () => {
+    console.log("Checking for refresh...");
+    window.setTimeout(() => {
+        runRefreshCheck();
+        setupRefreshMechanism();
+    }, 20 * 1000)
+}
+
+const runRefreshCheck = () => {
+    const lastRefreshed = getLastRefreshTimestamp();
+    const day = 1 * 60 * 60 * 24 * 1000; // 1 day
+    const now = new Date().getTime();
+
+
+    if (now > (lastRefreshed + day)) {
+        console.log("Refreshing, longer than a day ago!");
+        renderPodcasts();
+        showPodcastList();
+        setLastRefreshTimestamp();
+    } else {
+        console.log("No refresh needed, back to sleep");
+    }
+
+
+}
+
+const getLastRefreshTimestamp = () => {
+    if (localStorage.getItem(constants.LAST_REFRESHED_VAR)) {
+        return new Date(localStorage.getItem(Number.parseInt(constants.LAST_REFRESHED_VAR))).getTime();
+    } else {
+        // First page load
+        return setLastRefreshTimestamp();
+    }
+}
+
+const setLastRefreshTimestamp = () => {
+    const lastRefreshed = new Date().getTime();
+    localStorage.setItem(constants.LAST_REFRESHED_VAR, lastRefreshed);
+    return lastRefreshed;
+}
 
 renderPodcasts();
+setupRefreshMechanism();
+
+
