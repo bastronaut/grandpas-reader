@@ -169,10 +169,59 @@ const getAudio = (text) => {
     request.post(constants.SYNTHESIZE_ENDPOINT, {
         json: { "text": text }
     }).then(result => {
-        
+
     })
 
-    
+
 }
+
+
+
+
+
+/**
+ * Need a refresh mechanism so that grandpa does not need to restart the app
+ */
+const setupRefreshMechanism = () => {
+    console.log("Checking for refresh...");
+    window.setTimeout(() => {
+        runRefreshCheck();
+        setupRefreshMechanism();
+    }, 20 * 1000)
+}
+
+const runRefreshCheck = () => {
+    const lastRefreshed = getLastRefreshTimestamp();
+    const day = 1 * 60 * 60 * 24 * 1000; // 1 day
+    const now = new Date().getTime();
+
+
+    if (now > (lastRefreshed + day)) {
+        console.log("Refreshing, longer than a day ago!");
+        renderNews();
+        setLastRefreshTimestamp();
+    } else {
+        console.log("No refresh needed, back to sleep");
+    }
+
+
+}
+
+const getLastRefreshTimestamp = () => {
+    if (localStorage.getItem(constants.LAST_REFRESHED_VAR)) {
+        return new Date(localStorage.getItem(Number.parseInt(constants.LAST_REFRESHED_VAR))).getTime();
+    } else {
+        // First page load
+        return setLastRefreshTimestamp();
+    }
+}
+
+const setLastRefreshTimestamp = () => {
+    const lastRefreshed = new Date().getTime();
+    localStorage.setItem(constants.LAST_REFRESHED_VAR, lastRefreshed);
+    return lastRefreshed;
+}
+
 renderNews();
+setupRefreshMechanism();
 
