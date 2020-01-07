@@ -57,23 +57,41 @@ const setupOnclicks = () => {
         pauseAudio();
     });
 
+    // TODO: REWORK WHEN NOT TIRED
     // Previous news item button click
     $("#js-prev-news-item").on("click", () => {
-        currentActiveNewsItem = currentActiveNewsItem - 1;
 
-        if (currentActiveNewsItem == 0) hidePrevButton();
-        if (currentActiveNewsItem < globalNewsItems.length - 1) showNextButton();
+        if (!currentActiveNewsItem == 0) {
+            currentActiveNewsItem += 1;
+        }
 
+        // ensure next button is visible
+        showNextButton();
+
+        // at beginning, can not go back
+        if (currentActiveNewsItem == 0) {
+            hidePrevButton();
+            return;
+        }
 
         renderNewsItem(globalNewsItems[currentActiveNewsItem]);
     });
 
     // Next news item button click
     $("#js-next-news-item").on("click", () => {
-        currentActiveNewsItem = currentActiveNewsItem + 1;
 
-        if (currentActiveNewsItem > 0) showPrevButton();
-        if (currentActiveNewsItem == globalNewsItems.length - 1) hideNextButton();
+        if (!currentActiveNewsItem != globalNewsItems.length - 1) {
+            currentActiveNewsItem += 1;
+        }
+
+        // ensure prev button is visible
+        showPrevButton();
+
+        // max news item reached, everything read
+        if (currentActiveNewsItem == globalNewsItems.length - 1) {
+            hideNextButton();
+            return;
+        }
 
         renderNewsItem(globalNewsItems[currentActiveNewsItem]);
     })
@@ -86,6 +104,7 @@ const setupOnclicks = () => {
 }
 
 const showPrevButton = () => {
+
     $("#js-prev-news-item").show();
 }
 const hidePrevButton = () => {
