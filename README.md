@@ -1,19 +1,20 @@
-# Google credentials
+## Run on Heroku:
 
-Requires setting the credentials in environment variables.
+### 1. Set environment variables
 
 Log into heroku panel, and set Config vars:
 
-```
-heroku config:set GOOGLE_CREDENTIALS={the json content of the google credentials file}
-```
+GOOGLE_APPLICATION_CREDENTIALS = google-credentials.json
+GOOGLE_CREDENTIALS = {the full contents as is of the google-credentials.json file}
+
+### 2. Add the buildpack
+
+heroku buildpacks:add https://github.com/bastronaut/heroku-google-application-credentials-buildpack.git
+
+### 3. Deploy app on Heroku
 
 
-example:
-https://medium.com/@michaelhays_84022/heres-a-much-simpler-and-more-secure-solution-dedfd792caf9
-
-
-Frontend needs to be recompiled into a bundle upon changes
+## Development
 
 ### Watch for file changes:
 ```
