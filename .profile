@@ -1,10 +1,11 @@
 # .sh to be run on startup
+# ephemereal read only filesystem?
+#echo "The credentials:"
+#echo ${GOOGLE_CREDENTIALS}
 
-echo "the creds:"
-echo ${GOOGLE_CREDENTAILS}
+#echo ${GOOGLE_CREDENTIALS} > /google-credentials.json
 
-echo ${GOOGLE_CREDENTIALS} > /google-credentials.json
-${GOOGLE_APPLICATION_CREDENTIALS} = /google-credentials.json
+# heroku config:set GOOGLE_APPLICATION_CREDENTIALS=/google-credentials.json"
 
-echo "stored application credentials"
+echo "credentials present:"
 ls
