@@ -7,5 +7,7 @@
 
 # heroku config:set GOOGLE_APPLICATION_CREDENTIALS=/google-credentials.json"
 
+heroku config:get GITHUB_USERNAME
 echo "credentials present:"
+cat google-credentials.json
 ls
