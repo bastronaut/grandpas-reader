@@ -70,6 +70,8 @@ router.use('/synthesize', (req, res, next) => {
         res.write(audiocontent);
 
         res.end();
+    }).catch( (error) => {
+        console.log(error);
     })
 })
 

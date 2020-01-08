@@ -19,6 +19,7 @@ async function translate(text) {
 
     // Performs the Text-to-Speech request
     const [response] = await client.synthesizeSpeech(request);
+    console.log("Finished synth with google");
     return response.audioContent;
 }
 
