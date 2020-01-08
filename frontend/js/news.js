@@ -57,43 +57,48 @@ const setupOnclicks = () => {
         pauseAudio();
     });
 
-    // TODO: REWORK WHEN NOT TIRED
+    // Play Title button
+    $("#js-title-speak").on("click", () => {
+        const titleMP3Url = determineSynthEndpointTitleOnly();
+
+        $("#js-news-title-audio-player").attr("src", titleMP3Url);
+        document.getElementById("js-news-title-audio-player").play();
+    });
+
+    // Play Date button
+    $("#js-date-speak").on("click", () => {
+        const dateMP3Url = determineSynthEndpointDateOnly();
+
+        $("#js-news-date-audio-player").attr("src", dateMP3Url);
+        document.getElementById("js-news-date-audio-player").play();
+    });
+
     // Previous news item button click
     $("#js-prev-news-item").on("click", () => {
 
-        if (!currentActiveNewsItem == 0) {
-            currentActiveNewsItem += 1;
-        }
-
-        // ensure next button is visible
         showNextButton();
+
+        currentActiveNewsItem -= 1;
+        renderNewsItem(globalNewsItems[currentActiveNewsItem]);
 
         // at beginning, can not go back
         if (currentActiveNewsItem == 0) {
             hidePrevButton();
-            return;
         }
-
-        renderNewsItem(globalNewsItems[currentActiveNewsItem]);
     });
 
     // Next news item button click
     $("#js-next-news-item").on("click", () => {
 
-        if (!currentActiveNewsItem != globalNewsItems.length - 1) {
-            currentActiveNewsItem += 1;
-        }
-
-        // ensure prev button is visible
         showPrevButton();
 
-        // max news item reached, everything read
-        if (currentActiveNewsItem == globalNewsItems.length - 1) {
-            hideNextButton();
-            return;
-        }
-
+        currentActiveNewsItem += 1;
         renderNewsItem(globalNewsItems[currentActiveNewsItem]);
+
+        // If no more items available, indicate it by hiding Next
+        if (currentActiveNewsItem >= globalNewsItems.length - 1) {
+            hideNextButton();
+        }
     })
 
     const audio = document.getElementsByTagName("audio")[0];
@@ -112,10 +117,10 @@ const hidePrevButton = () => {
 }
 
 const showNextButton = () => {
-    $("#js-prev-news-item").show();
+    $("#js-next-news-item").show();
 }
 const hideNextButton = () => {
-    $("#js-prev-news-item").hide();
+    $("#js-next-news-item").hide();
 }
 
 const pauseAudio = () => {

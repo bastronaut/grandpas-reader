@@ -56,9 +56,9 @@
     margin-right: auto;
 
     /* stick button to bottom */
-    position: fixed;
-    left: 50%;
-    transform: translateX(-50%);
+    /* position: fixed; */
+    /* left: 50%; */
+    /* transform: translateX(-50%); */
     bottom: 1rem;
 }
 
@@ -173,7 +173,7 @@ audio {
   }
 
   .speak-btn {
-    font-size: 3rem;
+    font-size: 4rem;
     color: black;
     font-weight: bold;
     text-align: center;
@@ -181,28 +181,49 @@ audio {
     display: inline-block;
     padding: 2rem 0;
     cursor: pointer;
-    position: fixed;
+    /* position: absolute; */
     /* left: 50%; */
     /* transform: translateX(-50%); */
     bottom: 1rem;
     width: 13rem;
-  }
+    background-color: #090977;
+    color: white;
+
+    align-self: flex-end;
+}
 
   .speak-title {
     margin-left: auto;
-    background-color: #2F2FA2;
-    color: white;
     left: 0;
   }
 
   .speak-date {
       margin-right: auto;
-      background-color: #2F2FA2;
       right: 0;
-      color: white;
+      
   }
 
 .back.navigate {
     display: none;
 }
 
+
+.button-container {
+    background-color: white;
+    border-top: 0.5rem solid black;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    
+    
+}
+
+.button-container-background {
+    display: flex;
+    /* align-items: flex-start;
+    flex-wrap: nowrap; */
+    height: 100%;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0.8rem 0;
+}
