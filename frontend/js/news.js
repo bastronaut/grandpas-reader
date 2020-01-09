@@ -77,6 +77,7 @@ const setupOnclicks = () => {
     $("#js-prev-news-item").on("click", () => {
 
         showNextButton();
+        hideStopButton();
 
         currentActiveNewsItem -= 1;
         renderNewsItem(globalNewsItems[currentActiveNewsItem]);
@@ -91,6 +92,7 @@ const setupOnclicks = () => {
     $("#js-next-news-item").on("click", () => {
 
         showPrevButton();
+        hideStopButton();
 
         currentActiveNewsItem += 1;
         renderNewsItem(globalNewsItems[currentActiveNewsItem]);
@@ -172,22 +174,23 @@ const determineSynthEndpointDateOnly = () => {
  */
 const setupRefreshMechanism = () => {
     console.log("Checking for refresh...");
+    runRefreshCheck();
+
     window.setTimeout(() => {
-        runRefreshCheck();
         setupRefreshMechanism();
     }, 20 * 1000)
 }
 
 const runRefreshCheck = () => {
     const lastRefreshed = getLastRefreshTimestamp();
-    const day = 1 * 60 * 60 * 24 * 1000; // 1 day
+    const day = 1 * 60 * 60 * 2 * 1000; // 2 day
     const now = new Date().getTime();
 
 
     if (now > (lastRefreshed + day)) {
         console.log("Refreshing, longer than a day ago!");
-        renderNews();
         setLastRefreshTimestamp();
+        location.reload();
     } else {
         console.log("No refresh needed, back to sleep");
     }
