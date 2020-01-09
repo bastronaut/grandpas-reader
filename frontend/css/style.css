@@ -181,11 +181,8 @@ audio {
     display: inline-block;
     padding: 2rem 0;
     cursor: pointer;
-    /* position: absolute; */
-    /* left: 50%; */
-    /* transform: translateX(-50%); */
     bottom: 1rem;
-    width: 13rem;
+    width: 14rem;
     background-color: #090977;
     color: white;
 

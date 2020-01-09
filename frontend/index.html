@@ -4,7 +4,7 @@
     <title>Opa's Nieuwslezer</title>
 
     <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <link rel="icon" href="http://grandpa-reader.herokuapp.com/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="description" content="BigSpender personal finance money management app" />
@@ -70,12 +70,12 @@
 
 
         <div class="row">
-            <div class="back navigate" id="js-prev-news-item" aria-hidden="true">
+            <button class="back navigate" id="js-prev-news-item" aria-hidden="true">
                 Vorige
-            </div>
-            <div class="next navigate" id="js-next-news-item" aria-hidden="true">
+            </button>
+            <button class="next navigate" id="js-next-news-item" aria-hidden="true">
                 Volgende
-            </div>
+            </button>
         </div>
         <div class="row text-body" id="js-text-to-speak">
             <h1 id="js-news-title" class="audio-title"></h1>
@@ -94,22 +94,22 @@
 
             <div class="button-container-background">
 
-                <div class="speak-btn speak-title" id="js-title-speak">
+                <!-- Aria hidden because opa might use built in Speak-Aloud but can read buttons just fine -->
+                <button class="speak-btn speak-title" id="js-title-speak" aria-hidden="true">
                     Titel
-                </div>
+                </button>
 
-                <div class="play" id="js-play-news-button">
+                <button class="play" id="js-play-news-button" aria-hidden="true">
                     Afspelen
-                </div>
+                </button>
 
-                <div class="pause" id="js-pause-news-button" style="display: none;">
+                <button class="pause" id="js-pause-news-button" style="display: none;" aria-hidden="true">
                     Pauzeren
-                </div>
+                </button>
 
-
-                <div class="speak-btn speak-date" id="js-date-speak">
+                <button class="speak-btn speak-date" id="js-date-speak" aria-hidden="true">
                     Datum
-                </div>
+                </button>
             </div>
         </div>
 
