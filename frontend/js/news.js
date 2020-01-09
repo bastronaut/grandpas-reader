@@ -78,6 +78,7 @@ const setupOnclicks = () => {
 
         showNextButton();
         hideStopButton();
+        util.flashPrevious();
 
         currentActiveNewsItem -= 1;
         renderNewsItem(globalNewsItems[currentActiveNewsItem]);
@@ -93,6 +94,7 @@ const setupOnclicks = () => {
 
         showPrevButton();
         hideStopButton();
+        util.flashNext();
 
         currentActiveNewsItem += 1;
         renderNewsItem(globalNewsItems[currentActiveNewsItem]);

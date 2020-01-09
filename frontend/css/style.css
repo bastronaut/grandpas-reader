@@ -114,51 +114,6 @@ audio {
 
 
 
-/* experimental yellow color scheme */
-
-/* body { background: yellow; }
-* { color: black; }
-.podcast-item-container:nth-child(odd) .bottom-border-indicator {border-bottom: 15px solid #fff; }
-.podcast-item-container:nth-child(even) .bottom-border-indicator {border-bottom: 15px solid #fff; } */
-
-@media only screen and (max-width: 769px) {
-    .navigate {
-      font-size: 2rem;
-    }
-  }
-
-
-  @media only screen and (max-width: 668px) {
-    .title, .number {
-      font-size: 1.8rem;
-      padding-left: 0;
-    }
-    .podcast-item {
-        padding: 1rem;
-    }
-
-    .back, .next {
-        padding: 1.5rem 1rem;
-        width: 100%;
-    }
-
-    .play, .pause {
-        font-size: 3rem;
-        padding: 0.5rem 2rem;
-        border-radius: 15px;
-    }
-
-    .audio-description {
-        font-size: 1.5rem;
-    }
-
-    audio {
-        margin: 1rem auto;
-    }
-
-  }
-
-
   /* Overrides for News styling instead of podcasts */
 
   .news-view .navigate {
@@ -224,3 +179,62 @@ audio {
     width: 100%;
     padding: 0.8rem 0;
 }
+
+.flash-overlay {
+    width: 100%;
+    height: 100vh;
+    position: absolute;
+}
+
+.JS-flash-overlay-next {
+    background-color: #fa7a5b;
+}
+
+.JS-flash-overlay-back {
+    background-color: #0251d6;
+}
+
+
+
+@media only screen and (max-width: 769px) {
+    .navigate {
+      font-size: 2rem;
+    }
+  }
+
+
+  @media only screen and (max-width: 668px) {
+    .title, .number {
+      font-size: 1.8rem;
+      padding-left: 0;
+    }
+    .podcast-item {
+        padding: 1rem;
+    }
+
+    .back, .next {
+        padding: 1.5rem 1rem;
+        width: 100%;
+    }
+
+    .play, .pause {
+        font-size: 2.5rem;
+        padding: 0.5rem 2rem;
+        border-radius: 15px;
+    }
+
+    .audio-description {
+        font-size: 1.5rem;
+    }
+
+    audio {
+        margin: 1rem auto;
+    }
+
+    /* overrides for news styling instead of podcasts */
+
+    .speak-btn {
+        font-size: 1.5rem;
+        border-radius: 15px;
+    }
+  }

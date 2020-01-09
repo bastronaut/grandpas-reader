@@ -97,6 +97,7 @@ const setupOnclicks = () => {
 
         showNextButton();
         hideStopButton();
+        util.flashPrevious();
 
         currentActiveNewsItem -= 1;
         renderNewsItem(globalNewsItems[currentActiveNewsItem]);
@@ -112,6 +113,7 @@ const setupOnclicks = () => {
 
         showPrevButton();
         hideStopButton();
+        util.flashNext();
 
         currentActiveNewsItem += 1;
         renderNewsItem(globalNewsItems[currentActiveNewsItem]);
@@ -253,6 +255,26 @@ exports.formatDate = (date) => {
 }
 
 
+exports.flashNext = () => {
+
+    $("#js-flash-overlay").removeClass("JS-flash-overlay-back");
+    $("#js-flash-overlay").addClass("JS-flash-overlay-next");
+    $("#js-flash-overlay").show();
+
+    window.setTimeout(() => {
+        $("#js-flash-overlay").hide();
+    }, 150)
+}
+
+exports.flashPrevious = () => {
+    $("#js-flash-overlay").removeClass("JS-flash-overlay-next");
+    $("#js-flash-overlay").addClass("JS-flash-overlay-back");
+    $("#js-flash-overlay").show();
+
+    window.setTimeout(() => {
+        $("#js-flash-overlay").hide();
+    }, 150)
+}
 },{}],5:[function(require,module,exports){
 // Browser Request
 //
