@@ -8,6 +8,7 @@ exports.FEED_NR_PARAM = "nr";
 exports.FEED_DATE_ONLY_PARAM = "dateOnly";
 exports.FEED_TITLE_ONLY_PARAM = "titleOnly";
 exports.NOS_NEWS_FEED = "NOSNews";
+exports.OOG_OP_MORGEN_FEED = "NOSNews";
 
 },{}],2:[function(require,module,exports){
 // enable for NOS news
@@ -15,7 +16,6 @@ const news = require('./news');
 
 // enable for NOS Oog op Morgen podcasts
 // const podcasts = require('./podcasts');
-
 },{"./news":3}],3:[function(require,module,exports){
 const request = require('browser-request');
 const constants = require('./constants');

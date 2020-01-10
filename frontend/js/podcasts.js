@@ -17,6 +17,8 @@ const getFeed = (endpoint) => {
 }
 
 const renderPodcasts = () => {
+    $("#js-news-view").hide();
+
     getFeed(constants.PODCAST_ENDPOINT).then(podcasts => {
 
         // May be a re-render due to timeout, clean up old list
@@ -101,7 +103,7 @@ const clickReturnToOverview = () => {
 }
 
 
-const setupPodcastOnclicks = () => {
+const setupOnclicks = () => {
 
     $(".podcast-item-container").on("click", (e) => {
 
@@ -132,6 +134,7 @@ const setupPodcastOnclicks = () => {
     // Next podcast button
     $("#js-next-item").on("click", () => {
         currentActivePodcast = currentActivePodcast + 1;
+        util.flashNext();
         showPodcastView(currentActivePodcast);
     })
 
@@ -208,6 +211,7 @@ const setLastRefreshTimestamp = () => {
     localStorage.setItem(constants.LAST_REFRESHED_VAR, lastRefreshed);
     return lastRefreshed;
 }
+
 
 renderPodcasts();
 setupRefreshMechanism();

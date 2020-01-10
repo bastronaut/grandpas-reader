@@ -39,12 +39,12 @@
     <div class="container-fluid podcast-view" id="js-podcast-view" style="display: none">
 
         <div class="row">
-            <div class="back navigate" id="js-return-to-overview" aria-hidden="true">
+            <button class="back navigate" id="js-return-to-overview" aria-hidden="true">
                 Terug naar overzicht
-            </div>
-            <div class="next navigate" id="js-next-item" aria-hidden="true">
+            </button>
+            <button class="next navigate" id="js-next-item" aria-hidden="true">
                 Volgende
-            </div>
+            </button>
         </div>
         <div class="row">
             <p id="js-audio-description" class="audio-description">
@@ -55,12 +55,15 @@
         </div>
         <div class="row button-container">
 
-            <div class="play" id="js-play-button">
-                Afspelen
-            </div>
+            <div class="button-container-background">
 
-            <div class="pause" id="js-pause-button" style="display: none;">
-                Pauzeren
+                <button class="play" id="js-play-button">
+                    Afspelen
+                </button>
+
+                <button class="pause" id="js-pause-button" style="display: none;">
+                    Pauzeren
+                </button>
             </div>
         </div>
 
@@ -71,7 +74,7 @@
 
 
         <div class="row">
-            <button class="back navigate" id="js-prev-news-item" aria-hidden="true">
+            <button class="back navigate back-news-item" id="js-prev-news-item" aria-hidden="true">
                 Vorige
             </button>
             <button class="next navigate" id="js-next-news-item" aria-hidden="true">

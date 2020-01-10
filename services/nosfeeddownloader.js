@@ -15,14 +15,18 @@ const downloadMetOogOpMorgen = (feedUrl) => {
 
     if (shouldRefreshFeed(constants.OOG_OP_MORGEN_CACHE)) {
         return downloadFeed(constants.NOS_OOG_OP_MORGEN_PODCAST).then((result) => {
-            setFeedCacheForFeed(feed, result);
+            setFeedCacheForFeed(constants.OOG_OP_MORGEN_CACHE, result);
             return new Promise((resolve, reject) => {
                 resolve(result);
             });
         });
     } else {
+        for (key in feeds) {
+            console.log(key);
+        }
+
         return new Promise((resolve, reject) => {
-            resolve(feeds[constants.NOS_OOG_OP_MORGEN_PODCAST].feedData);
+            resolve(feeds[constants.OOG_OP_MORGEN_CACHE].feedData);
         });
     }
 }
