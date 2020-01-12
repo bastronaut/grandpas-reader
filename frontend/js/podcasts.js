@@ -187,9 +187,10 @@ const runRefreshCheck = () => {
 
     if (now > (lastRefreshed + day)) {
         console.log("Refreshing, longer than a day ago!");
-        renderPodcasts();
-        showPodcastList();
+        // renderPodcasts();
+        // showPodcastList();
         setLastRefreshTimestamp();
+        window.location.reload();
     } else {
         console.log("No refresh needed, back to sleep");
     }

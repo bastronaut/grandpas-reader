@@ -192,7 +192,7 @@ const runRefreshCheck = () => {
     if (now > (lastRefreshed + day)) {
         console.log("Refreshing, longer than a day ago!");
         setLastRefreshTimestamp();
-        location.reload();
+        window.location.reload();
     } else {
         console.log("No refresh needed, back to sleep");
     }
