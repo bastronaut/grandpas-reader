@@ -1,5 +1,5 @@
 // enable for NOS news
-// const news = require('./news');
+const news = require('./news');
 
 // enable for NOS Oog op Morgen podcasts
-const podcasts = require('./podcasts');
+// const podcasts = require('./podcasts');

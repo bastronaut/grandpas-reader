@@ -12,19 +12,22 @@ exports.OOG_OP_MORGEN_FEED = "NOSNews";
 
 },{}],2:[function(require,module,exports){
 // enable for NOS news
-// const news = require('./news');
+const news = require('./news');
 
 // enable for NOS Oog op Morgen podcasts
-const podcasts = require('./podcasts');
-},{"./podcasts":3}],3:[function(require,module,exports){
+// const podcasts = require('./podcasts');
+},{"./news":3}],3:[function(require,module,exports){
 const request = require('browser-request');
 const constants = require('./constants');
 const util = require('./util');
 
-let globalPodcasts; // lazy global item to make 'nexting' from any view simpler
-let currentActivePodcast = 0;
+let globalNewsItems; // lazy global item to make 'nexting' and 'preving' simpler
+let currentActiveNewsItem = 0;
+
 
 const getFeed = (endpoint) => {
+    currentActiveNewsItem = 0;
+
     return new Promise((resolve, err) => {
         request(endpoint, (er, res) => {
             if (er) console.log(er);
@@ -35,126 +38,90 @@ const getFeed = (endpoint) => {
     });
 }
 
-const renderPodcasts = () => {
-    $("#js-news-view").hide();
 
-    getFeed(constants.PODCAST_ENDPOINT).then(podcasts => {
+const renderNews = () => {
 
-        // May be a re-render due to timeout, clean up old list
-        cleanupPodcastList();
-
-        globalPodcasts = podcasts.item;
-
-        if (podcasts.item) {
-            for (var i = 0; i < 50; i++) {
-                renderPodcastList(podcasts.item[i], i);
-            }
-        }
+    getFeed(constants.NEWS_ENDPOINT).then(news => {
+        globalNewsItems = news.result;
+        renderNewsItem(globalNewsItems[0]);
 
         setupOnclicks();
-
     }).catch(err => console.log(err));
 }
 
 
-renderPodcastList = (item, i) => {
-    const printNumber = (i + 1) + ".";
-    const date = new Date(item.pubDate[0]);
-    const printDate = util.formatDate(date);
-    let clone = $("#js-podcast-item-template").clone();
-    clone.find("#js-number-indicator").text(printNumber);
-    clone.find("#js-title").text(printDate);
-    clone.attr("id", "");
-    clone.find(".js-podcast-item").attr("audio-item-nr", i);
-    $("#js-podcast-items").append(clone);
-    clone.show();
-}
-
-const hidePodcastItems = () => {
-    $("#js-podcast-items").hide();
-}
-const showPodcastItems = () => {
-    $("#js-podcast-items").show();
-    hidePodcastView();
-}
-
-const hidePodcastView = () => {
-    hideStopButton();
-    $("#js-podcast-view").hide();
-
-}
-
-const showPodcastView = (activePodcastNr) => {
-
-    let activePodcast = globalPodcasts[activePodcastNr];
-    if (activePodcast && activePodcast.description) {
-        $("#js-audio-description").text(activePodcast.description[0]);
-    }
-    if (activePodcast && activePodcast.link) {
-        $("#js-audio-player").attr("src", activePodcast.link[0]);
-    }
-
-    if (activePodcast && activePodcast.pubDate) {
-        const date = new Date(activePodcast.pubDate[0]);
-        $("#js-audio-description").append("<br />");
-        $("#js-audio-description").append(util.formatDate(date));
-    }
-
-    hidePodcastItems();
-    $("#js-podcast-view").show();
-    hideStopButton();
-}
-
 const hidePlayButton = () => {
-    $("#js-play-button").hide();
-    $("#js-pause-button").show();
+    $("#js-play-news-button").hide();
+    $("#js-pause-news-button").show();
 
 }
 
 const hideStopButton = () => {
-    $("#js-play-button").show();
-    $("#js-pause-button").hide();
-}
-
-const clickReturnToOverview = () => {
-    pauseAudio();
-    showPodcastItems();
+    $("#js-play-news-button").show();
+    $("#js-pause-news-button").hide();
 }
 
 
 const setupOnclicks = () => {
 
-    $(".podcast-item-container").on("click", (e) => {
-
-        let node = $(e.target);
-        let podcastNrClicked = getPodcastNrFromClick(node);
-        currentActivePodcast = Number(podcastNrClicked);
-        showPodcastView(currentActivePodcast);
-
-    });
-
-    // Play button on Podcast view page
-    $("#js-play-button").on("click", () => {
+    // Play button 
+    $("#js-play-news-button").on("click", () => {
         hidePlayButton();
         playAudio();
     });
 
-    // Pause button on Podcast view page
-    $("#js-pause-button").on("click", () => {
+    // Pause button 
+    $("#js-pause-news-button").on("click", () => {
         hideStopButton();
         pauseAudio();
     });
 
-    // Back to list view button
-    $("#js-return-to-overview").on("click", () => {
-        clickReturnToOverview();
+    // Play Title button
+    $("#js-title-speak").on("click", () => {
+        const titleMP3Url = determineSynthEndpointTitleOnly();
+
+        $("#js-news-title-audio-player").attr("src", titleMP3Url);
+        document.getElementById("js-news-title-audio-player").play();
     });
 
-    // Next podcast button
-    $("#js-next-item").on("click", () => {
-        currentActivePodcast = currentActivePodcast + 1;
+    // Play Date button
+    $("#js-date-speak").on("click", () => {
+        const dateMP3Url = determineSynthEndpointDateOnly();
+
+        $("#js-news-date-audio-player").attr("src", dateMP3Url);
+        document.getElementById("js-news-date-audio-player").play();
+    });
+
+    // Previous news item button click
+    $("#js-prev-news-item").on("click", () => {
+
+        showNextButton();
+        hideStopButton();
+        util.flashPrevious();
+
+        currentActiveNewsItem -= 1;
+        renderNewsItem(globalNewsItems[currentActiveNewsItem]);
+
+        // at beginning, can not go back
+        if (currentActiveNewsItem == 0) {
+            hidePrevButton();
+        }
+    });
+
+    // Next news item button click
+    $("#js-next-news-item").on("click", () => {
+
+        showPrevButton();
+        hideStopButton();
         util.flashNext();
-        showPodcastView(currentActivePodcast);
+
+        currentActiveNewsItem += 1;
+        renderNewsItem(globalNewsItems[currentActiveNewsItem]);
+
+        // If no more items available, indicate it by hiding Next
+        if (currentActiveNewsItem >= globalNewsItems.length - 1) {
+            hideNextButton();
+        }
     })
 
     const audio = document.getElementsByTagName("audio")[0];
@@ -164,50 +131,85 @@ const setupOnclicks = () => {
 
 }
 
-// Podcast nr is stored in element in dom, but onclick may have fired from child node
-const getPodcastNrFromClick = (element) => {
-    if (element.hasClass("js-podcast-item") || element.is('body')) {
-        return element.attr("audio-item-nr");
-    }
-    return getPodcastNrFromClick(element.parent());
+const showPrevButton = () => {
+
+    $("#js-prev-news-item").show();
+}
+const hidePrevButton = () => {
+    $("#js-prev-news-item").hide();
 }
 
+const showNextButton = () => {
+    $("#js-next-news-item").show();
+}
+const hideNextButton = () => {
+    $("#js-next-news-item").hide();
+}
 
 const pauseAudio = () => {
-    document.getElementById("js-audio-player").pause();
+    document.getElementById("js-news-audio-player").pause();
 }
 
 const playAudio = () => {
-    document.getElementById("js-audio-player").play();
+    document.getElementById("js-news-audio-player").play();
 }
 
+const renderNewsItem = (newsItem) => {
+    console.log(newsItem);
+    $("#js-news-title").text(newsItem.title[0]);
+    $("#js-news-description").html(newsItem.description[0]);
 
-const cleanupPodcastList = () => {
-    $(".podcast-item-container:not(#js-podcast-item-template)").remove();
+    const date = new Date(newsItem.pubDate[0]);
+    const printDate = util.formatDate(date);
+
+    $("#js-news-date").text(printDate);
+
+    const endpoint = determineSynthEndpoint();
+    console.log(endpoint);
+    $("#js-news-audio-player").attr("src", endpoint);
 }
 
+const determineSynthEndpoint = () => {
+    return constants.SYNTHESIZE_ENDPOINT + '?' +
+        constants.FEED_PARAM + '=' + constants.NOS_NEWS_FEED +
+        '&' + constants.FEED_NR_PARAM + '=' + currentActiveNewsItem;
+}
+
+const determineSynthEndpointTitleOnly = () => {
+    return constants.SYNTHESIZE_ENDPOINT + '?' +
+        constants.FEED_PARAM + '=' + constants.NOS_NEWS_FEED +
+        '&' + constants.FEED_NR_PARAM + '=' + currentActiveNewsItem +
+        '&' + constants.FEED_TITLE_ONLY_PARAM + '=1';
+}
+
+const determineSynthEndpointDateOnly = () => {
+    return constants.SYNTHESIZE_ENDPOINT + '?' +
+        constants.FEED_PARAM + '=' + constants.NOS_NEWS_FEED +
+        '&' + constants.FEED_NR_PARAM + '=' + currentActiveNewsItem +
+        '&' + constants.FEED_DATE_ONLY_PARAM + '=1';
+
+}
 
 /**
  * Need a refresh mechanism so that grandpa does not need to restart the app
  */
 const setupRefreshMechanism = () => {
     console.log("Checking for refresh...");
+    runRefreshCheck();
+
     window.setTimeout(() => {
-        runRefreshCheck();
         setupRefreshMechanism();
     }, 20 * 1000)
 }
 
 const runRefreshCheck = () => {
     const lastRefreshed = getLastRefreshTimestamp();
-    const day = 1 * 60 * 60 * 24 * 1000; // 1 day
+    const day = 1 * 60 * 60 * 2 * 1000; // 2 day
     const now = new Date().getTime();
 
 
     if (now > (lastRefreshed + day)) {
         console.log("Refreshing, longer than a day ago!");
-        // renderPodcasts();
-        // showPodcastList();
         setLastRefreshTimestamp();
         window.location.reload();
     } else {
@@ -232,8 +234,7 @@ const setLastRefreshTimestamp = () => {
     return lastRefreshed;
 }
 
-
-renderPodcasts();
+renderNews();
 setupRefreshMechanism();
 
 
